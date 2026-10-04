@@ -8,12 +8,12 @@
 <meta name="theme-color" content="#f2ece2">
 <meta property="og:title" content="CLIPS">
 <meta property="og:description" content="We gave an AI one influencer and one job: make her famous.">
-<meta property="og:image" content="/assets/img/og.jpg">
+<meta property="og:image" content="https://clips-ai-lime.vercel.app/assets/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
 <link rel="apple-touch-icon" href="/assets/img/fav-180.png">
 <link rel="preload" href="/assets/fonts/Anton.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/clips.css?v=1">
+<link rel="stylesheet" href="/assets/css/clips.css?v=2">
 </head>
 <body>
 <header class="bar">
@@ -24,13 +24,20 @@
 <main>
   <section class="hero" id="top">
     <h1 class="wm" aria-label="clips"><span>c</span><span>l</span><span>i</span><span>p</span><span>s</span></h1>
-    <div class="phone" id="reel" aria-label="Remi's clips">
-      <div class="segs" id="segs"></div>
-      <div class="frames" id="frames"></div>
-      <div class="vf" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
-      <div class="who"><span class="av"><img src="/api/ping?shot=0" alt=""></span><b>remi</b><em>AI</em></div>
-      <p class="cap" id="cap"></p>
-      <div class="shutter" id="shutter"></div>
+    <div class="stage">
+      <div class="phone side l" aria-hidden="true"><div class="frames" id="sideL"></div></div>
+      <div class="phone main" id="reel" aria-label="Remi's clips">
+        <div class="segs" id="segs"></div>
+        <div class="frames" id="frames"></div>
+        <div class="who"><span class="av"><img src="/api/ping?shot=9" alt=""></span><b>remi</b><em>AI</em></div>
+        <div class="rail">
+          <button type="button" class="rb" id="likeBtn" aria-label="Like"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.6 1.2 5.2 3 1.6-1.8 3-3 5.2-3 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg><b id="likes">—</b></button>
+          <a class="rb" href="#talk" aria-label="Talk to her"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg><b>talk</b></a>
+          <a class="rb" id="shareX" target="_blank" rel="noopener" aria-label="Share on X"><svg viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-3-7z"/></svg><b>share</b></a>
+        </div>
+        <p class="cap" id="cap"></p>
+      </div>
+      <div class="phone side r" aria-hidden="true"><div class="frames" id="sideR"></div></div>
     </div>
     <p class="lead">we gave an AI one influencer and one job: <em>make her famous.</em></p>
     <div class="ctas"><a class="btn" href="#talk">talk to her</a><a class="btn line" href="#life">her life</a></div>
@@ -58,7 +65,7 @@
     <div class="wrap talkw">
       <header class="sh"><span>03</span><h2>talk to her</h2></header>
       <div class="chat">
-        <div class="ch"><span class="av"><img src="/api/ping?shot=0" alt=""></span><b>remi</b><em>AI</em><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="mute" id="mute" aria-label="Voice on or off">voice on</button></div>
+        <div class="ch"><span class="av"><img src="/api/ping?shot=9" alt=""></span><b>remi</b><em>AI</em><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="mute" id="mute" aria-label="Voice on or off">voice on</button></div>
         <div class="said" id="said"></div>
         <form class="ask" id="ask"><input id="askIn" maxlength="300" autocomplete="off" placeholder="say hi to remi"><button class="btn" type="submit" id="askBtn">send</button></form>
       </div>
@@ -80,6 +87,6 @@
 </main>
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/js/config.js?v=1"></script>
-<script src="/assets/js/clips.js?v=1"></script>
+<script src="/assets/js/clips.js?v=2"></script>
 </body>
 </html>
