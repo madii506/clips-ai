@@ -39,33 +39,46 @@ a { color: inherit; }
 .wm span { display: inline-block; animation: drop .9s cubic-bezier(.2, .9, .2, 1) both; }
 .wm span:nth-child(2) { animation-delay: .07s; } .wm span:nth-child(3) { animation-delay: .14s; color: var(--red); } .wm span:nth-child(4) { animation-delay: .21s; } .wm span:nth-child(5) { animation-delay: .28s; }
 @keyframes drop { from { transform: translateY(-60%) rotate(-6deg); opacity: 0; } }
-.phone { position: relative; z-index: 2; width: min(78vw, 340px); aspect-ratio: 9 / 16; margin-top: min(16vw, 190px); overflow: hidden; background: #111; border: 10px solid var(--ink); border-radius: 38px; box-shadow: 0 0 0 2px var(--paper), 14px 14px 0 var(--red); animation: rise 1s cubic-bezier(.2, .9, .2, 1) .25s both; }
+.stage { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; margin-top: min(15vw, 180px); }
+.phone { position: relative; overflow: hidden; aspect-ratio: 9 / 16; background: #111; border: 10px solid var(--ink); border-radius: 38px; }
+.phone.main { z-index: 3; width: min(76vw, 330px); box-shadow: 0 0 0 2px var(--paper), 14px 14px 0 var(--red); animation: rise 1s cubic-bezier(.2, .9, .2, 1) .25s both; }
+.phone.side { z-index: 1; width: min(48vw, 230px); border-width: 8px; border-radius: 30px; opacity: .96; }
+.phone.side.l { margin-right: -54px; transform: rotate(-9deg) translateY(30px); animation: fanl 1.1s cubic-bezier(.2, .9, .2, 1) .45s both; }
+.phone.side.r { margin-left: -54px; transform: rotate(9deg) translateY(30px); animation: fanr 1.1s cubic-bezier(.2, .9, .2, 1) .45s both; }
+@keyframes fanl { from { transform: rotate(0) translate(60%, 40px); opacity: 0; } }
+@keyframes fanr { from { transform: rotate(0) translate(-60%, 40px); opacity: 0; } }
 @keyframes rise { from { transform: translateY(70px) rotate(4deg); opacity: 0; } }
 .frames { position: absolute; inset: 0; }
-.frames img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.12); transition: opacity .5s; }
-.frames img.on { opacity: 1; animation: kb 6.4s linear both; }
-.frames img.on.alt { animation-name: kb2; }
-@keyframes kb { from { transform: scale(1.14) translate(2%, 1%); } to { transform: scale(1.02) translate(-1%, -1%); } }
-@keyframes kb2 { from { transform: scale(1.02) translate(-2%, 0); } to { transform: scale(1.15) translate(1%, -2%); } }
-.phone::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(0, 0, 0, .35), transparent 18%, transparent 62%, rgba(0, 0, 0, .7)); pointer-events: none; }
-.segs { position: absolute; left: 12px; right: 12px; top: 12px; z-index: 3; display: flex; gap: 4px; }
+.frames .it { position: absolute; inset: 0; transform: translateY(100%); transition: transform .62s cubic-bezier(.7, 0, .2, 1); }
+.frames .it.on { transform: none; }
+.frames .it.out { transform: translateY(-100%); }
+.frames .it img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.frames .it.on img { animation: kb 3.2s ease-out both; }
+@keyframes kb { from { transform: scale(1.12); } to { transform: scale(1.02); } }
+.side .frames .it { transform: none; opacity: 0; transition: opacity .9s; }
+.side .frames .it.on { opacity: 1; }
+.side .frames .it.on img { animation: none; }
+.phone.main::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(0, 0, 0, .35), transparent 18%, transparent 58%, rgba(0, 0, 0, .72)); pointer-events: none; }
+.segs { position: absolute; left: 12px; right: 12px; top: 12px; z-index: 3; display: flex; gap: 3px; }
 .segs i { flex: 1; height: 3px; overflow: hidden; background: rgba(255, 255, 255, .35); border-radius: 2px; }
 .segs i b { display: block; height: 100%; width: 0; background: #fff; }
 .segs i.done b { width: 100%; }
-.segs i.now b { animation: seg var(--d, 6.4s) linear both; }
+.segs i.now b { animation: seg var(--d, 2.8s) linear both; }
 @keyframes seg { to { width: 100%; } }
-.vf i { position: absolute; z-index: 3; width: 16px; height: 16px; border: 2px solid rgba(255, 255, 255, .85); }
-.vf .tl { left: 14px; top: 26px; border-right: 0; border-bottom: 0; } .vf .tr { right: 14px; top: 26px; border-left: 0; border-bottom: 0; }
-.vf .bl { left: 14px; bottom: 14px; border-right: 0; border-top: 0; } .vf .br { right: 14px; bottom: 14px; border-left: 0; border-top: 0; }
-.who { position: absolute; left: 16px; top: 34px; z-index: 3; display: flex; align-items: center; gap: 8px; color: #fff; font: 500 13px var(--mono); }
+.who { position: absolute; left: 14px; top: 26px; z-index: 3; display: flex; align-items: center; gap: 8px; color: #fff; font: 500 13px var(--mono); }
 .av { width: 30px; height: 30px; overflow: hidden; border: 2px solid #fff; border-radius: 50%; background: #333; flex: none; }
 .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .who em, .ch em { padding: 2px 6px; background: var(--red); color: #fff; border-radius: 4px; font: 500 10px var(--mono); font-style: normal; letter-spacing: .1em; }
-.cap { position: absolute; left: 16px; right: 16px; bottom: 28px; z-index: 3; min-height: 2.8em; margin: 0; color: #fff; font: 600 15px/1.4 var(--sans); text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
+.rail { position: absolute; right: 10px; bottom: 96px; z-index: 4; display: grid; gap: 14px; justify-items: center; }
+.rb { display: grid; justify-items: center; gap: 2px; padding: 0; background: none; border: 0; color: #fff; text-decoration: none; cursor: pointer; font: 500 11px var(--mono); text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
+.rb svg { width: 30px; height: 30px; fill: #fff; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .5)); transition: transform .2s cubic-bezier(.2, .9, .3, 1.6); }
+.rb:hover svg { transform: scale(1.15); }
+.rb.liked svg { fill: var(--red); animation: thump .4s cubic-bezier(.2, .9, .3, 1.6); }
+@keyframes thump { 40% { transform: scale(1.45); } }
+.burst { position: fixed; z-index: 70; pointer-events: none; width: 18px; height: 18px; background: var(--red); clip-path: path("M9 16.5S2.2 12.4.6 8.3C-.6 5.3 1.2 1.8 4.6 1.8c1.9 0 3.2 1.1 4.4 2.6 1.2-1.5 2.5-2.6 4.4-2.6 3.4 0 5.2 3.5 4 6.5C15.8 12.4 9 16.5 9 16.5z"); animation: burst 1s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes burst { to { transform: translate(var(--bx), var(--by)) rotate(var(--br)) scale(.6); opacity: 0; } }
+.cap { position: absolute; left: 14px; right: 58px; bottom: 26px; z-index: 3; min-height: 2.8em; margin: 0; color: #fff; font: 600 15px/1.4 var(--sans); text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
 .cap.typing::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: #fff; animation: blink .6s steps(1) infinite; }
-.shutter { position: absolute; inset: 0; z-index: 4; background: #fff; opacity: 0; pointer-events: none; }
-.shutter.snap { animation: snap .35s ease-out; }
-@keyframes snap { from { opacity: .85; } to { opacity: 0; } }
 .lead { position: relative; z-index: 2; max-width: 22ch; margin: 34px 0 22px; text-align: center; font: 400 clamp(30px, 4.6vw, 52px)/1.02 var(--disp); text-transform: uppercase; animation: rise .9s cubic-bezier(.2, .9, .2, 1) .45s both; }
 .lead em { font-style: normal; color: var(--red); }
 .ctas { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; animation: rise .9s cubic-bezier(.2, .9, .2, 1) .55s both; }
@@ -163,10 +176,13 @@ body.speaking .wv i { animation: wv .5s ease-in-out infinite; } body.speaking .w
   .st { scroll-snap-align: start; }
   .mc { margin-left: 0; flex-basis: 100%; }
 }
+@media (max-width: 560px) {
+  .phone.side { display: none; }
+}
 @media (max-width: 520px) {
   .feed { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .wm { top: 3vh; }
-  .phone { margin-top: 24vw; }
+  .stage { margin-top: 24vw; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
