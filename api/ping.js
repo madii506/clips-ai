@@ -15,11 +15,15 @@ const SHOTS = [
   'A new photo of this exact same woman: sitting front row at a fashion show, oversized black blazer, sunglasses, runway lights, candid street-style photo.',
   'A new photo of this exact same woman: at a beach club in Ibiza at sunset in a white one-piece swimsuit and an open linen shirt, holding a cocktail, laughing, golden light.',
   'A new photo of this exact same woman: a clean studio beauty portrait against a solid bright tomato-red seamless backdrop, black leather jacket, shoulders up, looking straight into the camera with a confident half smile, soft glamorous beauty lighting, magazine quality.',
+  'A new photo of this exact same woman: lounging on the sunny deck of a white yacht in a black bikini and oversized sunglasses, turquoise sea behind her, golden hour, candid influencer photo.',
+  'A new photo of this exact same woman: at an infinity pool overlooking the ocean in Bali in a red bikini, wet hair, laughing, sunset light, candid influencer photo.',
+  'A new photo of this exact same woman: walking along a white sand beach in the Maldives in a white bikini with an open linen shirt, holding her sandals, bright morning light, candid influencer photo.',
+  'A new photo of this exact same woman: sitting on the edge of a rooftop pool at night in a black swimsuit, city lights behind her, holding a drink, candid influencer photo.',
 ];
 module.exports = async (req, res) => {
   L.setOidc(req);
   const sq = L.query(req).shot;
-  if (sq != null && /^[0-9]$/.test(String(sq)) && L.dbReady()) {
+  if (sq != null && /^(1[0-3]|[0-9])$/.test(String(sq)) && L.dbReady()) {
     try {
       await L.ready(); const n = Number(sq), fresh = L.query(req).again === '1';
       let r = fresh ? null : (await L.q('SELECT img FROM p0_brand WHERE n=$1', [n]))[0];
