@@ -1,0 +1,10 @@
+name: her next clip
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+jobs:
+  shoot:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS --max-time 70 "https://clips-ai.vercel.app/api/clips?make=1" || true
