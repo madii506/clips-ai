@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
         await L.q('INSERT INTO p0_brand (n, img) VALUES ($1,$2) ON CONFLICT (n) DO UPDATE SET img=EXCLUDED.img, at=now()', [n, img]); r = { img };
       }
       if (!r) return L.send(res, 200, { ok: false, error: 'not made yet' });
-      res.statusCode = 200; res.setHeader('Content-Type', 'image/jpeg'); res.setHeader('Cache-Control', 'no-store'); return res.end(Buffer.from(r.img));
+      res.statusCode = 200; res.setHeader('Content-Type', 'image/jpeg'); res.setHeader('Cache-Control', 'public, max-age=3600'); res.setHeader('CDN-Cache-Control', 'public, s-maxage=86400'); return res.end(Buffer.from(r.img));
     } catch (e) { return L.send(res, 200, { ok: false, error: String(e && e.message).slice(0, 200) }); }
   }
   L.send(res, 200, { ok: true, records: L.dbReady(), gateway: !!L.gatewayToken(), photos: L.IMG_EDIT });
