@@ -18,6 +18,20 @@
     { src: '/api/ping?shot=4', cap: '$500K: the yacht.' },
     { src: '/api/ping?shot=5', cap: '$1M: the jet.' },
   ];
+  // the hero phone: her day one, then what she's manifesting (the AI shot them from her portrait)
+  const REEL = [
+    { src: '/api/ping?shot=1', cap: 'day one. me, a ring light and a dream.' },
+    { src: '/api/ping?shot=10', cap: 'manifesting: yacht week.' },
+    { src: '/api/ping?shot=6', cap: 'manifesting: the red carpet.' },
+    { src: '/api/ping?shot=11', cap: 'manifesting: bali.' },
+    { src: '/api/ping?shot=3', cap: 'manifesting: the penthouse.' },
+    { src: '/api/ping?shot=12', cap: 'manifesting: the maldives.' },
+    { src: '/api/ping?shot=7', cap: 'manifesting: front row.' },
+    { src: '/api/ping?shot=8', cap: 'manifesting: ibiza.' },
+    { src: '/api/ping?shot=13', cap: 'manifesting: rooftop pools.' },
+    { src: '/api/ping?shot=5', cap: 'manifesting: the jet.' },
+    { src: '/api/ping?shot=9', cap: 'manifesting: my first cover.' },
+  ];
   const STAGE = ['day one', 'rooftop', 'penthouse', 'yacht', 'jet'];
   let data = { stage: 0, mcap: null, clips: [] };
 
@@ -25,25 +39,46 @@
   (function tc() { const el = $('#tc'), t0 = performance.now(); const p = n => String(n).padStart(2, '0');
     setInterval(() => { const ms = performance.now() - t0, f = Math.floor(ms / 1000 * 24) % 24, s = Math.floor(ms / 1000); el.textContent = `${p(s / 3600 | 0)}:${p((s / 60 | 0) % 60)}:${p(s % 60)}:${p(f)}`; }, 42); })();
 
-  // ---------- the reel ----------
+  // ---------- the phones: the main one flips through her clips like a feed; the two behind it drift ----------
   const reel = (function () {
-    const fr = $('#frames'), segs = $('#segs'), cap = $('#cap'), sh = $('#shutter'), D = 6400;
-    let list = TRAILER.slice(), i = -1, timer = 0, typer = 0;
-    function build() { fr.innerHTML = list.map((c, k) => `<img alt="" src="${esc(c.src)}" ${k > 1 ? 'loading="lazy"' : ''}>`).join(''); segs.innerHTML = list.map(() => '<i><b></b></i>').join(''); segs.style.setProperty('--d', D / 1000 + 's'); }
-    function type(s) { clearInterval(typer); cap.textContent = ''; cap.classList.add('typing'); let k = 0; typer = setInterval(() => { k++; cap.textContent = s.slice(0, k); if (k >= s.length) { clearInterval(typer); cap.classList.remove('typing'); } }, calm ? 0 : 34); }
-    function go(n) {
-      const imgs = fr.children, bars = segs.children; if (!imgs.length) return;
-      i = (n + list.length) % list.length;
-      [...imgs].forEach((im, k) => { im.classList.toggle('on', k === i); im.classList.toggle('alt', k === i && i % 2 === 1); });
-      [...bars].forEach((b, k) => { b.className = k < i ? 'done' : k === i ? 'now' : ''; });
-      if (!calm) { sh.classList.remove('snap'); void sh.offsetWidth; sh.classList.add('snap'); }
-      type(list[i].cap);
-      clearTimeout(timer); timer = setTimeout(() => go(i + 1), D);
+    const fr = $('#frames'), segs = $('#segs'), cap = $('#cap'), D = 2800;
+    let list = REEL.slice(), i = -1, timer = 0, typer = 0, items = [];
+    function build() {
+      fr.innerHTML = ''; items = list.map((c, k) => { const d = document.createElement('div'); d.className = 'it'; d.innerHTML = `<img alt="" src="${esc(c.src)}" ${k > 2 ? 'loading="lazy"' : ''} decoding="async">`; fr.appendChild(d); return d; });
+      segs.innerHTML = list.slice(0, 12).map(() => '<i><b></b></i>').join(''); segs.style.setProperty('--d', D / 1000 + 's');
     }
-    $('#reel').addEventListener('click', e => { const r = e.currentTarget.getBoundingClientRect(); go(e.clientX - r.left < r.width / 3 ? i - 1 : i + 1); });
-    document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else timer = setTimeout(() => go(i + 1), D); });
+    function type(t) { clearInterval(typer); cap.textContent = ''; if (calm) { cap.textContent = t; return; } cap.classList.add('typing'); let k = 0; typer = setInterval(() => { k++; cap.textContent = t.slice(0, k); if (k >= t.length) { clearInterval(typer); cap.classList.remove('typing'); } }, 26); }
+    function go(n, back) {
+      if (!items.length) return; const prev = i; i = (n + list.length) % list.length;
+      items.forEach((el, k) => { el.style.transition = (k === i || k === prev) && !calm ? '' : 'none'; el.classList.toggle('on', k === i); el.classList.toggle('out', k === prev && k !== i && !back); });
+      if (back && prev >= 0) { const p = items[prev]; p.classList.remove('out'); }
+      const nx = items[(i + 1) % items.length]; const im = nx && nx.querySelector('img'); if (im) im.loading = 'eager';
+      [...segs.children].forEach((b, k) => { const j = i % segs.children.length; b.className = k < j ? 'done' : k === j ? 'now' : ''; });
+      type(list[i].cap);
+      clearTimeout(timer); if (!calm) timer = setTimeout(() => go(i + 1), D);
+    }
+    $('#reel').addEventListener('click', e => { if (e.target.closest('.rb')) return; const r = e.currentTarget.getBoundingClientRect(); go(e.clientX - r.left < r.width / 3 ? i - 1 : i + 1, e.clientX - r.left < r.width / 3); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else if (!calm) timer = setTimeout(() => go(i + 1), D); });
     build(); go(0);
-    return { add(clips) { const fresh = clips.slice(0, 6).map(c => ({ src: '/api/clips?img=' + c.id, cap: c.caption })); if (!fresh.length) return; list = fresh.concat(TRAILER); build(); go(0); } };
+    // the two phones behind: slower, out of step
+    [['#sideL', 4, 3400], ['#sideR', 7, 3900]].forEach(([sel, off, ms]) => {
+      const el = $(sel); if (!el) return; let j = off % REEL.length;
+      el.innerHTML = REEL.map((c, k) => `<div class="it${k === j ? ' on' : ''}"><img alt="" src="${esc(c.src)}" loading="lazy" decoding="async"></div>`).join('');
+      if (!calm) setInterval(() => { if (document.hidden) return; const its = el.children; its[j].classList.remove('on'); j = (j + 1) % its.length; its[j].classList.add('on'); }, ms);
+    });
+    return { add(clips) { const fresh = clips.slice(0, 6).map(c => ({ src: '/api/clips?img=' + c.id, cap: c.caption })); if (!fresh.length) return; list = fresh.concat(REEL); build(); go(0); } };
+  })();
+
+  // ---------- likes: real taps from real visitors, counted by the server ----------
+  (function likes() {
+    const btn = $('#likeBtn'), out = $('#likes');
+    function burst(x, y) { if (calm) return; for (let k = 0; k < 8; k++) { const h = document.createElement('i'); h.className = 'burst'; h.style.left = x - 9 + 'px'; h.style.top = y - 9 + 'px'; h.style.setProperty('--bx', (Math.random() * 120 - 60).toFixed(0) + 'px'); h.style.setProperty('--by', (-60 - Math.random() * 110).toFixed(0) + 'px'); h.style.setProperty('--br', (Math.random() * 80 - 40).toFixed(0) + 'deg'); document.body.appendChild(h); setTimeout(() => h.remove(), 1100); } }
+    btn.addEventListener('click', async e => {
+      const r = btn.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + 14);
+      btn.classList.remove('liked'); void btn.offsetWidth; btn.classList.add('liked');
+      try { const j = await fetch('/api/clips?like=1', { method: 'POST' }).then(r => r.json()); if (j && j.ok) out.textContent = j.likes.toLocaleString(); else if (j && j.error) toast(j.error); } catch {}
+    });
+    const sh = $('#shareX'); sh.href = 'https://x.com/intent/post?text=' + encodeURIComponent('an AI is raising one influencer. make her famous. ' + location.origin);
   })();
 
   // ---------- her life strip ----------
@@ -72,7 +107,7 @@
   function tape() { const caps = (data.clips || []).map(c => c.caption).concat(TRAILER.map(t => t.cap)).slice(0, 10); const h = caps.map(c => `<span>${esc(c)}</span>`).join(''); $('#tape').innerHTML = h + h; }
 
   async function load() {
-    try { const r = await fetch('/api/clips', { cache: 'no-store' }); const j = await r.json(); if (j && j.ok) { const had = (data.clips || []).length; data = j; if (j.clips.length && j.clips.length !== had) reel.add(j.clips); } } catch {}
+    try { const r = await fetch('/api/clips', { cache: 'no-store' }); const j = await r.json(); if (j && j.ok) { const had = (data.clips || []).length; data = j; if (j.likes != null) $('#likes').textContent = Number(j.likes).toLocaleString(); if (j.clips.length && j.clips.length !== had) reel.add(j.clips); } } catch {}
     strip(); feed(); tape();
   }
 
