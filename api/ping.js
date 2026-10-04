@@ -11,11 +11,15 @@ const SHOTS = [
   'A new photo of this exact same woman: lounging on a white sofa in a luxury penthouse with floor-to-ceiling windows over a city skyline at night, black designer dress, a glass of champagne, filming herself.',
   'A new photo of this exact same woman: on the deck of a white superyacht in a turquoise Mediterranean harbour, white linen outfit, sunglasses, golden hour, paparazzi photo.',
   'A new photo of this exact same woman: stepping down the stairs of a private jet onto a sunny runway, oversized sunglasses, cream suit, phone in hand, paparazzi photo.',
+  'A new photo of this exact same woman: on a red carpet at night in an elegant black satin gown, photographers and camera flashes behind her, glamorous, confident pose.',
+  'A new photo of this exact same woman: sitting front row at a fashion show, oversized black blazer, sunglasses, runway lights, candid street-style photo.',
+  'A new photo of this exact same woman: at a beach club in Ibiza at sunset in a white one-piece swimsuit and an open linen shirt, holding a cocktail, laughing, golden light.',
+  'A new photo of this exact same woman: a magazine cover photoshoot in a studio, dramatic lighting, bold red lipstick, black turtleneck, looking into the camera.',
 ];
 module.exports = async (req, res) => {
   L.setOidc(req);
   const sq = L.query(req).shot;
-  if (sq != null && /^[0-5]$/.test(String(sq)) && L.dbReady()) {
+  if (sq != null && /^[0-9]$/.test(String(sq)) && L.dbReady()) {
     try {
       await L.ready(); const n = Number(sq), fresh = L.query(req).again === '1';
       let r = fresh ? null : (await L.q('SELECT img FROM p0_brand WHERE n=$1', [n]))[0];

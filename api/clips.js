@@ -15,6 +15,11 @@ module.exports = async (req, res) => {
       if (!r) return L.send(res, 404, { ok: false, error: 'No such clip.' });
       res.statusCode = 200; res.setHeader('Content-Type', 'image/jpeg'); res.setHeader('Cache-Control', 'public, max-age=86400, immutable'); return res.end(Buffer.from(r.img));
     }
+    if (qy.like === '1' && req.method === 'POST') {
+      if (L.limited('like:' + L.ip(req), 30, 600e3)) return L.send(res, 429, { ok: false, error: 'easy. she felt that.' });
+      const r = (await L.q('UPDATE p0_state SET likes = likes + 1 WHERE id=1 RETURNING likes'))[0];
+      return L.send(res, 200, { ok: true, likes: Number(r.likes) });
+    }
     if (qy.make === '1') {
       if (L.limited('make', 6, 3600e3)) return L.send(res, 429, { ok: false, error: 'Slow down.' });
       const last = (await L.q('SELECT at FROM p0_posts ORDER BY id DESC LIMIT 1'))[0];
@@ -30,7 +35,7 @@ module.exports = async (req, res) => {
       const row = (await L.q('INSERT INTO p0_posts (mint, caption, scene, img) VALUES ($1,$2,$3,$4) RETURNING id, at', ['remi', p.caption, p.scene, img]))[0];
       return L.send(res, 200, { ok: true, made: true, id: row.id, caption: p.caption, stage: R.STAGES[st.i].key });
     }
-    const [rows, st] = await Promise.all([L.q('SELECT id, caption, at FROM p0_posts ORDER BY id DESC LIMIT 60'), R.stage()]);
-    return L.send(res, 200, { ok: true, name: R.NAME, stage: st.i, mcap: st.mcap, stages: R.STAGES.map(s => ({ at: s.at, key: s.key })), clips: rows.map(r => ({ id: Number(r.id), caption: r.caption, at: r.at })) }, 'public, max-age=0, s-maxage=30, stale-while-revalidate=300');
+    const [rows, st, lk] = await Promise.all([L.q('SELECT id, caption, at FROM p0_posts ORDER BY id DESC LIMIT 60'), R.stage(), L.q('SELECT likes FROM p0_state WHERE id=1')]);
+    return L.send(res, 200, { ok: true, name: R.NAME, stage: st.i, mcap: st.mcap, likes: lk[0] ? Number(lk[0].likes) : 0, stages: R.STAGES.map(s => ({ at: s.at, key: s.key })), clips: rows.map(r => ({ id: Number(r.id), caption: r.caption, at: r.at })) });
   } catch (e) { return L.send(res, 200, { ok: false, error: 'Her records didn’t answer.' }); }
 };

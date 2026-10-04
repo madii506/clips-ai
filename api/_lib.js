@@ -151,6 +151,7 @@ function ready() {
       `CREATE TABLE IF NOT EXISTS p0_log (id bigserial PRIMARY KEY, kind text NOT NULL, mint text, text text NOT NULL, at timestamptz NOT NULL DEFAULT now())`,
       `CREATE TABLE IF NOT EXISTS p0_brand (n int PRIMARY KEY, img bytea NOT NULL, at timestamptz NOT NULL DEFAULT now())`,
       `CREATE TABLE IF NOT EXISTS p0_state (id int PRIMARY KEY, cycle int NOT NULL DEFAULT 0, next_at timestamptz NOT NULL DEFAULT now(), lock_at timestamptz, shots_day date, shots int NOT NULL DEFAULT 0)`,
+      `ALTER TABLE p0_state ADD COLUMN IF NOT EXISTS likes bigint NOT NULL DEFAULT 0`,
     ]) await q(st);
     await q(`INSERT INTO p0_state (id) VALUES (1) ON CONFLICT (id) DO NOTHING`);
   })().catch(e => { made = null; throw e; });
