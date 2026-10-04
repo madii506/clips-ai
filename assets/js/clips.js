@@ -63,8 +63,8 @@
     // the two phones behind: slower, out of step
     [['#sideL', 4, 3400], ['#sideR', 7, 3900]].forEach(([sel, off, ms]) => {
       const el = $(sel); if (!el) return; let j = off % REEL.length;
-      el.innerHTML = REEL.map((c, k) => `<div class="it${k === j ? ' on' : ''}"><img alt="" src="${esc(c.src)}" loading="lazy" decoding="async"></div>`).join('');
-      if (!calm) setInterval(() => { if (document.hidden) return; const its = el.children; its[j].classList.remove('on'); j = (j + 1) % its.length; its[j].classList.add('on'); }, ms);
+      el.innerHTML = REEL.map((c, k) => `<div class="it${k === j ? ' on' : ''}"><img alt="" src="${esc(c.src)}" loading="${k === j || k === (j + 1) % REEL.length ? 'eager' : 'lazy'}" decoding="async"></div>`).join('');
+      if (!calm) setInterval(() => { if (document.hidden) return; const its = el.children; its[j].classList.remove('on'); j = (j + 1) % its.length; its[j].classList.add('on'); const nx = its[(j + 1) % its.length].querySelector('img'); if (nx) nx.loading = 'eager'; }, ms);
     });
     return { add(clips) { const fresh = clips.slice(0, 6).map(c => ({ src: '/api/clips?img=' + c.id, cap: c.caption })); if (!fresh.length) return; list = fresh.concat(REEL); build(); go(0); } };
   })();
