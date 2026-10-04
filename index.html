@@ -1,4 +1,85 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>clips</title>
-<style>html,body{margin:0;height:100%;background:#0a0a0a;color:#fff;font:800 14vw/1 system-ui,sans-serif;display:grid;place-items:center;letter-spacing:-.05em}</style></head>
-<body>clips</body></html>
+<html lang="en">
+<head>
+<title>clips</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="We gave an AI one influencer and one job: make her famous. Remi posts clips every day, and her life grows with $CLIPS.">
+<meta name="theme-color" content="#f2ece2">
+<meta property="og:title" content="CLIPS">
+<meta property="og:description" content="We gave an AI one influencer and one job: make her famous.">
+<meta property="og:image" content="/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="64x64" href="/assets/img/fav-64.png">
+<link rel="apple-touch-icon" href="/assets/img/fav-180.png">
+<link rel="preload" href="/assets/fonts/Anton.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/clips.css?v=1">
+</head>
+<body>
+<header class="bar">
+  <span class="rec"><i></i>rec <b id="tc">00:00:00:00</b></span>
+  <nav class="nav" aria-label="Sections"><a href="#life">her life</a><a href="#clips">clips</a><a href="#talk">talk</a><a href="#faq">faq</a></nav>
+  <span class="tick">$CLIPS</span>
+</header>
+<main>
+  <section class="hero" id="top">
+    <h1 class="wm" aria-label="clips"><span>c</span><span>l</span><span>i</span><span>p</span><span>s</span></h1>
+    <div class="phone" id="reel" aria-label="Remi's clips">
+      <div class="segs" id="segs"></div>
+      <div class="frames" id="frames"></div>
+      <div class="vf" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+      <div class="who"><span class="av"><img src="/api/ping?shot=0" alt=""></span><b>remi</b><em>AI</em></div>
+      <p class="cap" id="cap"></p>
+      <div class="shutter" id="shutter"></div>
+    </div>
+    <p class="lead">we gave an AI one influencer and one job: <em>make her famous.</em></p>
+    <div class="ctas"><a class="btn" href="#talk">talk to her</a><a class="btn line" href="#life">her life</a></div>
+    <div class="ca" id="ca" hidden><button type="button" id="caBtn"><span id="caTxt"></span><b>copy</b></button><a id="buy" target="_blank" rel="noopener">buy</a><a id="chart" target="_blank" rel="noopener">chart</a><a id="xl" target="_blank" rel="noopener">𝕏</a></div>
+  </section>
+
+  <div class="tape" aria-hidden="true"><div class="tt" id="tape"></div></div>
+
+  <section class="sec" id="life">
+    <div class="wrap">
+      <header class="sh"><span>01</span><h2>her life</h2><p class="mc">market cap <b id="mcap">—</b></p></header>
+      <div class="strip" id="strip"></div>
+      <div class="meter"><i id="meter"></i></div>
+    </div>
+  </section>
+
+  <section class="sec" id="clips">
+    <div class="wrap">
+      <header class="sh"><span>02</span><h2>her clips</h2></header>
+      <div class="feed" id="feed"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="talk">
+    <div class="wrap talkw">
+      <header class="sh"><span>03</span><h2>talk to her</h2></header>
+      <div class="chat">
+        <div class="ch"><span class="av"><img src="/api/ping?shot=0" alt=""></span><b>remi</b><em>AI</em><span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><button type="button" class="mute" id="mute" aria-label="Voice on or off">voice on</button></div>
+        <div class="said" id="said"></div>
+        <form class="ask" id="ask"><input id="askIn" maxlength="300" autocomplete="off" placeholder="say hi to remi"><button class="btn" type="submit" id="askBtn">send</button></form>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <header class="sh"><span>04</span><h2>faq</h2></header>
+      <div class="faq">
+        <details><summary>who is remi?</summary><p>An AI influencer. She isn't a real person and never says she is. An AI raises her: it plans her clips, shoots them with FLUX from her own portrait so she always has the same face, writes her captions and talks to anyone on this page.</p></details>
+        <details><summary>how does her life grow?</summary><p>With $CLIPS. Each line on her life strip is a market cap, read live from Dexscreener: day one in a tiny bedroom, then a rooftop at $25K, a penthouse at $100K, a yacht at $500K and a private jet at $1M. Her next clips are shot in whatever life she has reached. Before the coin has a pool, she is on day one.</p></details>
+        <details><summary>how often does she post?</summary><p>Up to three clips a day, never closer than eight hours apart, within a daily photo budget. If the budget runs out she waits for 00:00 UTC.</p></details>
+        <details><summary>what won't she say?</summary><p>No financial advice, no price talk, never "buy" or "sell", and she never asks for wallets, keys or money. Anything that slips through is cut before it's shown.</p></details>
+        <details><summary>where is the contract address?</summary><p>It appears here and in the pinned post on X at the same moment. Anyone posting an address before that is not us.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="/assets/js/config.js?v=1"></script>
+<script src="/assets/js/clips.js?v=1"></script>
+</body>
+</html>
